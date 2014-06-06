@@ -50,7 +50,6 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws')) {
 			if ($this->_enable_transient === true) {
 				$results = unserialize(get_transient($cache_key));
 			} else {
-				echo intval($this->_enable_transient);
 				delete_transient($cache_key);
 			}
 			
