@@ -13,14 +13,7 @@ if (!class_exists('Musicwhore_Album')) {
 		
 		public $_table = 'mw_albums';
 		public $_primary_key = 'album_id';
-		private $_format_masks = array(
-			2 => 'album', 
-			4 => 'single',
-			8 => 'ep',
-			32 => 'video',
-			64 => 'book',
-		);
-		
+
 		public function __construct() {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Artist', 'alias' => 'artist') );
@@ -37,15 +30,16 @@ if (!class_exists('Musicwhore_Album')) {
 		
 		public function get_artist_albums($artist_id, $args = null) {
 			$albums = $this->get_many_by('album_artist_id', $artist_id, $args);
+			$formats = $this->format->get_all();
 			$_this = $this;
-			array_walk($albums, function ($album) use ($_this) {
-				$album->album_format = $_this->parse_format_mask($album->album_format_mask);
+			array_walk($albums, function ($album) use ($_this, $formats) {
+				foreach ($formats as $format) {
+					if ($album->album_format_id == $format->format_id) {
+						$album->album_format = $format;
+					}
+				}
 			});
 			return $albums;
-		}
-		
-		public function parse_format_mask($format_mask) {
-			return $this->_format_masks[$format_mask];
 		}
 	}
 }
