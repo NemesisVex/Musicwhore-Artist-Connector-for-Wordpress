@@ -17,6 +17,10 @@ if (!class_exists('Musicwhore_Album_Meta')) {
 			parent::__construct();
 		}
 
+		public function load($id) {
+			parent::load('meta_album_id', $id);
+		}
+
 	}
 }
 

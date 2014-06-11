@@ -29,6 +29,9 @@ if (!class_exists('Musicwhore_Release')) {
 				$release->release_format_name = $format->format_name;
 				$release->release_format_alias = $format->format_alias;
 				$release->release_musicbrainz_id = $this->musicbrainz->get_many_by('mb_album_id', $id);
+
+				$this->meta->load($id);
+				$release->settings = $this->meta->get_settings();
 			}
 			return $release;
 		}
@@ -63,7 +66,7 @@ if (!class_exists('Musicwhore_Release')) {
 			$parameters['ResponseGroup'] = 'Large';
 			$wp_results = $aws->get($asin, $parameters);
 			$aws_results = simplexml_load_string($wp_results['body']);
-			
+
 			if (!empty($aws_results->Request->Errors)) {
 				throw new Exception($aws_results->Request->Errors->Error->Message);
 			}

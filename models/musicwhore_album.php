@@ -25,6 +25,9 @@ if (!class_exists('Musicwhore_Album')) {
 			$album = parent::get($id, $args);
 			if (!empty($album)) {
 				$album->album_format = $this->format->get($album->album_format_id);
+
+				$this->meta->load($id);
+				$album->settings = $this->meta->get_settings();
 			}
 			return $album;
 		}
