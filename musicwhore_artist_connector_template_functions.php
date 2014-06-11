@@ -65,6 +65,7 @@ if (!function_exists('get_release')) {
 	function get_release($release_id) {
 		$model = new Musicwhore_Release();
 		$release = $model->get($release_id);
+		$release->meta = $model->meta->get_by('meta_release_id', $release_id);
 		$release->album = $model->album->get($release->release_album_id);
 		$release->album->artist = $model->album->artist->get($release->album->album_artist_id);
 		$release->tracks = get_release_tracks($release_id, array( 'order_by' => 'track_disc_num, track_track_num' ));

@@ -18,6 +18,7 @@ if (!class_exists('Musicwhore_Release')) {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Album', 'alias' => 'album') );
 			$this->load_relationship( array( 'model' => 'Musicwhore_Release_Format', 'alias' => 'format' ) );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Release_Meta', 'alias' => 'meta' ) );
 			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Musicbrainz', 'alias' => 'musicbrainz' ) );
 		}
 		

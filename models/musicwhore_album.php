@@ -18,6 +18,7 @@ if (!class_exists('Musicwhore_Album')) {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Artist', 'alias' => 'artist') );
 			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Format', 'alias' => 'format') );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Meta', 'alias' => 'meta') );
 		}
 		
 		public function get($id, $args = null) {
