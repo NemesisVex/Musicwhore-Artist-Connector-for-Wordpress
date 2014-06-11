@@ -24,12 +24,14 @@ if (!class_exists('Musicwhore_Album')) {
 		public function __construct() {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Artist', 'alias' => 'artist') );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Format', 'alias' => 'format') );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Meta', 'alias' => 'meta') );
 		}
 		
 		public function get($id, $args = null) {
 			$album = parent::get($id, $args);
 			if (!empty($album)) {
-				$album->album_format = $this->parse_format_mask($album->album_format_mask);
+				$album->album_format = $this->format->get($album->album_format_id);
 			}
 			return $album;
 		}
