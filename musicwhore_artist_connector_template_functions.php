@@ -80,6 +80,14 @@ if (!function_exists('get_release_from_amazon')) {
 	}
 }
 
+if (!function_exists('get_release_from_musicbrainz')) {
+	function get_release_from_musicbrainz($mbid, $options = array()) {
+		$model = new Musicwhore_Release();
+		$release = $model->get_release_from_musicbrainz($mbid, $options);
+		return $release;
+	}
+}
+
 if (!function_exists('get_release_tracks')) {
 	function get_release_tracks($release_id) {
 		$model = new Musicwhore_Track();
