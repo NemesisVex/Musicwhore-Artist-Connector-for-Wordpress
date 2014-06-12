@@ -73,6 +73,21 @@ if (!class_exists('Musicwhore_Release')) {
 			
 			return $aws_results->Items->Item;
 		}
+
+		public function get_release_from_musicbrainz($mbid, $options = array()) {
+			if (empty($options)) {
+				$options = array(
+					'artists',
+					'labels',
+					'recordings',
+				);
+			}
+			$mb_url = 'http://musicbrainz.org/ws/2/release/' . $mbid . '?inc=' . implode('+', $options);
+			$wp_results = wp_remote_get($mb_url);
+			$mb_results = simplexml_load_string($wp_results['body']);
+
+			return $mb_results;
+		}
 	}
 }
 

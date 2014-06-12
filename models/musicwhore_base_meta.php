@@ -20,19 +20,13 @@ if (!class_exists('Musicwhore_Base_Meta')) {
 		}
 
 		public function load($key, $id) {
-			$this->items = $this->get_by($key, $id);
+			$this->items = $this->get_many_by($key, $id);
 
-			if (is_array($this->items)) {
-				$settings = array();
-				foreach ($this->items as $item) {
-					$settings[$item->meta_field_name] = $item->meta_field_value;
-				}
-				$this->settings = (object) $settings;
-			} else {
-				$this->settings = (object) array(
-					$this->items->meta_field_name => $this->items->meta_field_value,
-				);
+			$settings = array();
+			foreach ($this->items as $item) {
+				$settings[$item->meta_field_name] = $item->meta_field_value;
 			}
+			$this->settings = (object) $settings;
 		}
 
 		public function get_settings() {

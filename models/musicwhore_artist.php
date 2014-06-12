@@ -17,13 +17,19 @@ if (!class_exists('Musicwhore_Artist')) {
 		public function __construct() {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Artist_Personnel', 'alias' => 'members' ) );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Artist_Meta', 'alias' => 'meta' ) );
 		}
 		
 		public function get($id, $args = null) {
 			$artist = parent::get($id, $args);
 			if (!empty($artist)) {
-				$artist->artist_display_name = $this->format_artist_name($artist);
-				$artist->artist_members = $this->members->get_artist_members($id);
+				$this->meta->load($id);
+
+				$artist->settings = $this->meta->get_settings();
+				$artist->artist_name = $this->format_artist_name($artist);
+				$artist->artist_members = $this->members->get_artist_members($id, array(
+					'order_by' => 'member_order',
+				));
 			}
 			return $artist;
 		}
@@ -37,7 +43,7 @@ if (!class_exists('Musicwhore_Artist')) {
 			
 			$_this = $this;
 			array_walk($artists, function ($artist) use ($_this) {
-				$artist->artist_display_name = $_this->format_artist_name($artist);
+				$artist->artist_name = $_this->format_artist_name($artist);
 			});
 			
 			return $artists;
@@ -53,9 +59,13 @@ if (!class_exists('Musicwhore_Artist')) {
 			if (empty($artist->artist_first_name)) {
 				$artist_display_name = $artist->artist_last_name;
 			} else {
-				$artist_display_name = (($artist->artist_settings_mask & 2) == 2) ? $artist->artist_last_name . ' '  .$artist->artist_first_name : $artist->artist_first_name . ' ' . $artist->artist_last_name;
+				if (empty($artist->settings->is_asian_name)) {
+					$this->meta->load($artist->artist_id);
+					$artist->settings = $this->meta->get_settings();
+				}
+				$artist_display_name = ($artist->settings->is_asian_name == true) ? $artist->artist_last_name . ' '  .$artist->artist_first_name : $artist->artist_first_name . ' ' . $artist->artist_last_name;
 			}
-			
+
 			return $artist_display_name;
 		}
 		
