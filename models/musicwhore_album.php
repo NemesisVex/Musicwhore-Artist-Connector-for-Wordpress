@@ -18,12 +18,16 @@ if (!class_exists('Musicwhore_Album')) {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Artist', 'alias' => 'artist') );
 			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Format', 'alias' => 'format') );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Album_Meta', 'alias' => 'meta') );
 		}
 		
 		public function get($id, $args = null) {
 			$album = parent::get($id, $args);
 			if (!empty($album)) {
 				$album->album_format = $this->format->get($album->album_format_id);
+
+				$this->meta->load($id);
+				$album->settings = $this->meta->get_settings();
 			}
 			return $album;
 		}

@@ -18,6 +18,7 @@ if (!class_exists('Musicwhore_Track')) {
 		public function __construct() {
 			parent::__construct();
 			$this->load_relationship( array( 'model' => 'Musicwhore_Release', 'alias' => 'release' ) );
+			$this->load_relationship( array( 'model' => 'Musicwhore_Track_Meta', 'alias' => 'meta' ) );
 		}
 		
 		public function get_release_tracks($release_id, $args = null) {
@@ -25,6 +26,13 @@ if (!class_exists('Musicwhore_Track')) {
 				$args['order_by'] = 'track_disc_num, track_track_num';
 			}
 			$tracks = $this->get_many_by('track_release_id', $release_id, $args);
+
+			$_this = $this;
+			array_walk($tracks, function ($track) use ($_this) {
+				$this->meta->load($track->track_id);
+				$track->settings = $this->meta->get_settings();
+			});
+
 			return $tracks;
 		}
 		
