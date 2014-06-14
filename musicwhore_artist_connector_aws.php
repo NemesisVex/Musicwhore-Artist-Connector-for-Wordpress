@@ -29,9 +29,13 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws')) {
 		
 		public function __construct($options = null) {
 			parent::__construct();
+
+			if (defined('MUSICWHORE_AWS_SECRET_KEY') === false) {
+				return false;
+			}
 			
 			$this->_access_key = get_option('aws_access_key');
-			$this->_secret_key = get_option('aws_secret_key');
+			$this->_secret_key = MUSICWHORE_AWS_SECRET_KEY;
 			
 			if (empty($options['locale'])) {
 				$options['locale'] = 'us';
@@ -44,7 +48,7 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws')) {
 		}
 		
 		public function get($asin, $parameters = null) {
-			$cache_key = md5($asin);
+			$cache_key = md5($asin . MUSICWHORE_AWS_SECRET_KEY);
 			$results = null;
 			
 			if ($this->_enable_transient === true) {
@@ -68,7 +72,7 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws')) {
 		}
 		
 		public function search($keywords, $index, $parameters) {
-			$cache_key = md5($keywords . $index);
+			$cache_key = md5($keywords . $index . MUSICWHORE_AWS_SECRET_KEY);
 			$results = null;
 			
 			if ($this->_enable_transient === true) {
