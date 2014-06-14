@@ -23,7 +23,6 @@ if (!class_exists('Musicwhore_Artist_Connector_Settings')) {
 			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_name');
 			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_user');
 			register_setting('musicwhore_artist_connector-group', 'aws_access_key');
-			register_setting('musicwhore_artist_connector-group', 'aws_secret_key');
 			register_setting('musicwhore_artist_connector-group', 'aws_affiliate_id_us');
 			register_setting('musicwhore_artist_connector-group', 'aws_affiliate_id_uk');
 			register_setting('musicwhore_artist_connector-group', 'aws_affiliate_id_jp');
@@ -38,7 +37,6 @@ if (!class_exists('Musicwhore_Artist_Connector_Settings')) {
 			add_settings_section('musicwhore_artist_connector-amazon', 'Amazon ecommerce API settings', array(&$this, 'render_settings_amazon_description'), 'musicwhore_artist_connector');
 
 			add_settings_field('musicwhore_artist_connector-aws_access_key', 'Access key', array(&$this, 'render_settings_input_text_field'), 'musicwhore_artist_connector', 'musicwhore_artist_connector-amazon', array('field' => 'aws_access_key'));
-			add_settings_field('musicwhore_artist_connector-aws_secret_key', 'Secret key', array(&$this, 'render_settings_input_text_field'), 'musicwhore_artist_connector', 'musicwhore_artist_connector-amazon', array('field' => 'aws_secret_key'));
 			add_settings_field('musicwhore_artist_connector-aws_affiliate_id_us', 'Affiliate ID (US)', array(&$this, 'render_settings_input_text_field'), 'musicwhore_artist_connector', 'musicwhore_artist_connector-amazon', array('field' => 'aws_affiliate_id_us'));
 			add_settings_field('musicwhore_artist_connector-aws_affiliate_id_uk', 'Affiliate ID (UK)', array(&$this, 'render_settings_input_text_field'), 'musicwhore_artist_connector', 'musicwhore_artist_connector-amazon', array('field' => 'aws_affiliate_id_uk'));
 			add_settings_field('musicwhore_artist_connector-aws_affiliate_id_jp', 'Affiliate ID (Japan)', array(&$this, 'render_settings_input_text_field'), 'musicwhore_artist_connector', 'musicwhore_artist_connector-amazon', array('field' => 'aws_affiliate_id_jp'));
@@ -49,11 +47,13 @@ if (!class_exists('Musicwhore_Artist_Connector_Settings')) {
 		}
 
 		public function render_settings_db_description() {
-			echo "Connection settings for the Musicwhore.org artist database";
+			echo "Connection settings for the Musicwhore.org artist database.";
 		}
 
 		public function render_settings_amazon_description() {
-			echo "Connection settings for Amazon ecommerce web services";
+			$secret_status = defined('MUSICWHORE_AWS_SECRET_KEY') === true ? 'set' : 'unset';
+			$description = 'Connection settings for Amazon ecommerce web services. The secret key is currently ' . $secret_status . '.';
+			echo $description;
 		}
 
 		public function render_settings_input_text_field($args) {
