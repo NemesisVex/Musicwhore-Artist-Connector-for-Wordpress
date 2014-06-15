@@ -61,21 +61,23 @@ if (!class_exists('Musicwhore_Track')) {
 		
 		public static function parse_aws_tracks($aws_tracks) {
 			$tracks = array();
-			
-			foreach ($aws_tracks->Disc as $aws_disc) {
-				$disc_num = (int) $aws_disc->attributes()->Number;
-				$track = array();
-				$t = 1;
-				foreach ($aws_disc->Track as $aws_track) {
-					$track['track_disc_num'] = $disc_num;
-					$track['track_track_num'] = $t;
-					$track['track_song_title'] = (string) $aws_track;
-					$t++;
-					
-					$tracks[] = (object) $track;
+
+			if (!empty($aws_tracks->Disc)) {
+				foreach ($aws_tracks->Disc as $aws_disc) {
+					$disc_num = (int) $aws_disc->attributes()->Number;
+					$track = array();
+					$t = 1;
+					foreach ($aws_disc->Track as $aws_track) {
+						$track['track_disc_num'] = $disc_num;
+						$track['track_track_num'] = $t;
+						$track['track_song_title'] = (string) $aws_track;
+						$t++;
+
+						$tracks[] = (object) $track;
+					}
 				}
 			}
-			
+
 			return $tracks;
 		}
 	}

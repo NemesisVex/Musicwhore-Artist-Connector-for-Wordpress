@@ -45,6 +45,36 @@ if (!class_exists('Musicwhore_Album')) {
 			});
 			return $albums;
 		}
+
+		public function get_classical_albums($artist_id, $args = null) {
+			$fields = !empty($args['fields']) ? implode(", ", $args['fields']) : '*';
+
+			$results = (object)array();
+
+			$soloist_query = $this->mw_db->prepare( "select $fields from " . $this->meta->_table . " as m left join $this->_table as a on m.meta_album_id = a.album_id where meta_field_name = 'soloist_id' and meta_field_value = %d", $artist_id);
+			$results->soloist = $this->mw_db->get_results($soloist_query);
+
+			$ensemble_query = $this->mw_db->prepare( "select $fields from " . $this->meta->_table . " as m left join $this->_table as a on m.meta_album_id = a.album_id where meta_field_name = 'ensemble_id' and meta_field_value = %d", $artist_id);
+			$results->ensemble = $this->mw_db->get_results($ensemble_query);
+
+			$conductor_query = $this->mw_db->prepare( "select $fields from " . $this->meta->_table . " as m left join $this->_table as a on m.meta_album_id = a.album_id where meta_field_name = 'conductor_id' and meta_field_value = %d", $artist_id);
+			$results->conductor = $this->mw_db->get_results($conductor_query);
+
+			$formats = $this->format->get_all();
+			$_this = $this;
+
+			foreach ($results as $albums) {
+				array_walk($albums, function ($album) use ($_this, $formats) {
+					foreach ($formats as $format) {
+						if ($album->album_format_id == $format->format_id) {
+							$album->album_format = $format;
+						}
+					}
+				});
+			}
+
+			return $results;
+		}
 	}
 }
 

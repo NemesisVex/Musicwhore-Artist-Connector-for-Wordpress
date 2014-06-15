@@ -25,6 +25,9 @@ if (!function_exists('get_artist')) {
 		$model = new Musicwhore_Artist();
 		$artist = $model->get($artist_id);
 		$artist->albums = get_artist_albums($artist_id);
+		if ($artist->settings->is_classical_artist == true) {
+			$artist->classical = get_classical_albums($artist_id);
+		}
 		return $artist;
 	}
 }
@@ -40,6 +43,14 @@ if (!function_exists('get_artist_albums')) {
 	function get_artist_albums($artist_id, $args = null) {
 		$model = new Musicwhore_Album();
 		$albums = $model->get_artist_albums($artist_id, $args);
+		return $albums;
+	}
+}
+
+if (!function_exists('get_classical_albums')) {
+	function get_classical_albums($artist_id, $args = null) {
+		$model = new Musicwhore_Album();
+		$albums = $model->get_classical_albums($artist_id, $args);
 		return $albums;
 	}
 }
