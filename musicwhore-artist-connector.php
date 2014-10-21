@@ -16,7 +16,7 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 		private $settings;
 		private $post_meta;
 		private $rewrite;
-		
+
 		public function __construct() {
 			// Setup settings.
 			require_once(plugin_dir_path(__FILE__) . '/musicwhore_artist_connector_settings.php');
@@ -29,11 +29,12 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 			// Setup rewrite rules.
 			require_once(plugin_dir_path(__FILE__) . '/musicwhore_artist_connector_rewrite.php');
 			$this->rewrite = new Musicwhore_Artist_Connector_Rewrite();
-			
+
+			// Load JavaScript and CSS dependencies.
 			add_action('init', array(&$this, 'init_js'));
 			add_action('init', array(&$this, 'init_css'));
 		}
-		
+
 		public function init_js() {
 			wp_enqueue_script('chosen-js', plugin_dir_url(__FILE__) . 'js/chosen/chosen.jquery.min.js');
 		}
@@ -56,10 +57,13 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 
 }
 
+// The actual execution of the plugin code happens here.
 if (class_exists('Musicwhore_Artist_Connector')) {
+	// Fire activiation hooks.
 	register_activation_hook(__FILE__, array('Musicwhore_Artist_Connector', 'activate'));
 	register_deactivation_hook(__FILE__, array('Musicwhore_Artist_Connector', 'deactivate'));
 
+	// Instantiating an instance of the Musicwhore Artist Connector fires all necessary WordPress hooks.
 	$mw_artist_connector = new Musicwhore_Artist_Connector();
 	
 	// Setup template tags.
