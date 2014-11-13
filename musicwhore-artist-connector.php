@@ -4,7 +4,7 @@
  * Plugin Name: Musicwhore.org Artist Connector
  * Plugin URI: https://bitbucket.org/NemesisVex/musicwhore-artist-connector-for-wordpress
  * Description: This custom plugin connects the Musicwhore.org artist directory with content imported from Movable Type
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Greg Bueno
  * Author URI: http://vigilantmedia.com
  * License: MIT
