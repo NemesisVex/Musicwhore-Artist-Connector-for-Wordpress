@@ -4,7 +4,7 @@
  * Plugin Name: Musicwhore.org Artist Connector
  * Plugin URI: http://archive.musicwhore.org
  * Description: This custom plugin connects the Musicwhore.org artist directory with content imported from Movable Type
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Greg Bueno
  * Author URI: http://vigilantmedia.com
  * License: MIT
@@ -40,6 +40,7 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 		
 		public function init_css() {
 			wp_enqueue_style('chosen-css', plugin_dir_url(__FILE__) . 'js/chosen/chosen.min.css' );
+			wp_enqueue_style('mw-meta-css', plugin_dir_url(__FILE__) . 'css/layout.css' );
 		}
 		
 		public static function activate() {

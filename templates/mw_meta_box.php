@@ -1,17 +1,25 @@
-<div class="wrap">
+<div class="wrap mw-meta">
+	<?php if ( $artist_model->driver_is_ready === false ): ?>
 	<p>
-		<label>Artist:</label>
+		The database driver may not be configured correctly. Check the <a href="<?php echo admin_url( 'options-general.php?page=musicwhore_artist_connector'); ?>">Musicwhore Artist Connector settings</a>.
+	</p>
+	<?php endif; ?>
+
+	<?php if (!empty( $artists )): ?>
+	<p>
+		<label for="mw_artist_id">Artist:</label>
 		<select name="mw_artist_id" id="mw_artist_id">
 			<option value=""></option>
 			<?php foreach ($artists as $artist): ?>
-			<option value="<?php echo $artist->artist_id ?>"<?php if ($artist->artist_id == $mw_artist_id): ?> selected="selected"<?php endif; ?>><?php echo (!empty($artist->artist_asian_name_utf8)) ? $artist->artist_asian_name_utf8 : $artist->artist_display_name; ?></option>
+			<option value="<?php echo $artist->artist_id ?>"<?php if ($artist->artist_id == $mw_artist_id): ?> selected="selected"<?php endif; ?>><?php echo $artist->artist_name; ?></option>
 			<?php endforeach; ?>
 		</select>
 	</p>
+	<?php endif; ?>
 
 	<?php if (!empty($mw_artist_id)): ?>
 	<p>
-		<label>Album:</label>
+		<label for="mw_album_id">Album:</label>
 		<select name="mw_album_id" id="mw_album_id">
 			<option value=""></option>
 			<?php foreach ($albums as $album): ?>
@@ -23,7 +31,7 @@
 	
 	<?php if (!empty($mw_album_id)): ?>
 	<p>
-		<label>Release:</label>
+		<label for="mw_release_id">Release:</label>
 		<select name="mw_release_id" id="mw_release_id">
 			<option value=""></option>
 			<?php foreach ($releases as $release): ?>
