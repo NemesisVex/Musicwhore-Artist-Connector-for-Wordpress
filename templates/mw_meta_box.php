@@ -1,5 +1,5 @@
 <div class="wrap mw-meta">
-	<?php if ( $artist_model->driver_is_ready === false ): ?>
+	<?php if ( $artist_model->get_driver_status() === false ): ?>
 	<p>
 		The database driver may not be configured correctly. Check the <a href="<?php echo admin_url( 'options-general.php?page=musicwhore_artist_connector'); ?>">Musicwhore Artist Connector settings</a>.
 	</p>
