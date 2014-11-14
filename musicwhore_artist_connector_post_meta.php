@@ -30,6 +30,7 @@ if (!class_exists('Musicwhore_Artist_Connector_Post_Meta')) {
 			add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
 			add_action('save_post', array(&$this, 'save_post_meta'));
 			add_action('wp_ajax_get_artist_albums', array(__CLASS__, 'get_artist_albums'));
+			add_action('wp_ajax_get_album_releases', array(__CLASS__, 'get_album_releases'));
 		}
 		
 		public function add_meta_boxes() {
@@ -84,13 +85,31 @@ if (!class_exists('Musicwhore_Artist_Connector_Post_Meta')) {
 						return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
 					});
 				}
+				$albums_json = json_encode( $albums );
+				echo $albums_json;
 			}
-			$albums_json = json_encode( $albums );
-			echo $albums_json;
 			die();
 		}
 
-		
+
+		public static function get_album_releases() {
+			$mw_album_id = $_POST['mw_album_id'];
+
+			if (!empty( $mw_album_id )) {
+				$release_model = new Musicwhore_Release();
+				if ( $release_model->get_driver_status() === true ) {
+					$releases = $release_model->get_album_releases($mw_album_id);
+					usort($releases, function ($a, $b) {
+						return ($a->release_catatalog_num == $b->release_catatalog_num) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
+					});
+				}
+				$releases_json = json_encode( $releases );
+				echo $releases_json;
+			}
+			die();
+		}
+
+
 		public function save_post_meta( $post_id ) {
 			$mw_artist_id = $_POST['mw_artist_id'];
 			$mw_album_id = $_POST['mw_album_id'];

@@ -91,8 +91,8 @@
 			var albums = $.parseJSON( response );
 
 			if ( albums.length > 0 ) {
-//				MetaBoxHandler.empty_albums();
-//				MetaBoxHandler.empty_releases();
+				MetaBoxHandler.empty_albums();
+				MetaBoxHandler.empty_releases();
 
 				for (var a in albums) {
 					var album = $('<option>').val( albums[a].album_id ).html( albums[a].album_title );
@@ -103,7 +103,32 @@
 			}
 		});
 	});
+
 	$('#mw_album_id').chosen();
+	$('#mw_album_id').change( function () {
+
+		var data = {
+			action: 'get_album_releases',
+			mw_album_id: this.value
+		}
+
+		$.post(ajaxurl, data, function ( response ) {
+			alert(releases);
+			var releases = $.parseJSON( response );
+
+			if ( releases.length > 0 ) {
+				MetaBoxHandler.empty_releases();
+
+				for (var r in releases) {
+					var release = $('<option>').val( releases[r].album_id ).html( releases[r].album_title );
+					$('#mw_release_id').append( release );
+				}
+				$('#mw_release_id').trigger('chosen:updated');
+
+			}
+		});
+	});
+
 	$('#mw_release_id').chosen();
 })(jQuery);
 </script>
