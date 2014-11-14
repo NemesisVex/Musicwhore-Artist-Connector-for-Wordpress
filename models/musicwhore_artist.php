@@ -45,7 +45,7 @@ if (!class_exists('Musicwhore_Artist')) {
 			array_walk($artists, function ($artist) use ($_this) {
 				$artist->artist_name = $_this->format_artist_name($artist);
 			});
-			
+
 			return $artists;
 		}
 		
