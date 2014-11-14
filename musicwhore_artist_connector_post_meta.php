@@ -29,6 +29,7 @@ if (!class_exists('Musicwhore_Artist_Connector_Post_Meta')) {
 			// Setup post meta
 			add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
 			add_action('save_post', array(&$this, 'save_post_meta'));
+			add_action('wp_ajax_get_artist_albums', array(__CLASS__, 'get_artist_albums'));
 		}
 		
 		public function add_meta_boxes() {
@@ -71,6 +72,24 @@ if (!class_exists('Musicwhore_Artist_Connector_Post_Meta')) {
 
 			include(sprintf("%s/templates/mw_meta_box.php", dirname(__FILE__)));
 		}
+
+		public static function get_artist_albums() {
+			$mw_artist_id = $_POST['mw_artist_id'];
+
+			if (!empty( $mw_artist_id )) {
+				$album_model = new Musicwhore_Album();
+				if ( $album_model->get_driver_status() === true ) {
+					$albums = $album_model->get_artist_albums($mw_artist_id);
+					usort($albums, function ($a, $b) {
+						return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
+					});
+				}
+			}
+			$albums_json = json_encode( $albums );
+			echo $albums_json;
+			die();
+		}
+
 		
 		public function save_post_meta( $post_id ) {
 			$mw_artist_id = $_POST['mw_artist_id'];
