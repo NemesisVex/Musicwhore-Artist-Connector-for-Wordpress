@@ -45,22 +45,28 @@ if (!class_exists('Musicwhore_Artist_Connector_Post_Meta')) {
 			$mw_release_id = get_post_meta($post->ID, '_mw_release_id', true);
 			
 			$artist_model = new Musicwhore_Artist();
-			$artists = $artist_model->get_artists();
-			
+			if ( $artist_model->get_driver_status() === true ) {
+				$artists = $artist_model->get_artists();
+			}
+
 			if (!empty($mw_artist_id)) {
 				$album_model = new Musicwhore_Album();
-				$albums = $album_model->get_artist_albums($mw_artist_id);
-				usort($albums, function ($a, $b) {
-					return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
-				});
+				if ( $album_model->get_driver_status() === true ) {
+					$albums = $album_model->get_artist_albums($mw_artist_id);
+					usort($albums, function ($a, $b) {
+						return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
+					});
+				}
 			}
 			
 			if (!empty($mw_album_id)) {
 				$release_model = new Musicwhore_Release();
-				$releases = $release_model->get_album_releases($mw_album_id);
-				usort($albums, function ($a, $b) {
-					return ($a->album_catalog_num == $b->album_catalog_num) ? 0 : ( $a->album_catalog_num < $b->album_catalog_num ? -1 : 1 );
-				});
+				if ( $release_model->get_driver_status() === true ) {
+					$releases = $release_model->get_album_releases($mw_album_id);
+					usort($releases, function ($a, $b) {
+						return ($a->release_catatalog_num == $b->release_catatalog_num) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
+					});
+				}
 			}
 
 			include(sprintf("%s/templates/mw_meta_box.php", dirname(__FILE__)));

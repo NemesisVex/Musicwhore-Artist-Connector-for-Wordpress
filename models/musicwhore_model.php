@@ -11,15 +11,17 @@
 if (!class_exists('Musicwhore_Model')) {
 	
 	class Musicwhore_Model {
+		private $driver_is_ready;
 		protected $mw_db;
 		
 		public $_table;
 		public $_primary_key;
-		
+
 		public function __construct() {
 			require_once(plugin_dir_path(__FILE__) . '../musicwhore_artist_connector_db_driver.php');
 			$driver = new Musicwhore_Artist_Connector_Db_Driver();
 			$this->mw_db = $driver->get_driver();
+			$this->driver_is_ready = $driver->is_ready();
 		}
 		
 		public function get($id, $args = null) {
@@ -43,9 +45,9 @@ if (!class_exists('Musicwhore_Model')) {
 			} else {
 				$prepared_query = "select $fields from $this->_table";
 			}
-			
+
 			$result = $this->mw_db->get_results($prepared_query);
-			
+
 			return $result;
 		}
 		
@@ -117,6 +119,10 @@ if (!class_exists('Musicwhore_Model')) {
 			
 			include_once(plugin_dir_path(__FILE__) . strtolower($model) . '.php');
 			$this->{$alias} = new $model();
+		}
+
+		public function get_driver_status() {
+			return $this->driver_is_ready;
 		}
 	}
 	

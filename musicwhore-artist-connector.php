@@ -2,9 +2,9 @@
 
 /**
  * Plugin Name: Musicwhore.org Artist Connector
- * Plugin URI: https://bitbucket.org/NemesisVex/musicwhore-artist-connector-for-wordpress
+ * Plugin URI: http://archive.musicwhore.org
  * Description: This custom plugin connects the Musicwhore.org artist directory with content imported from Movable Type
- * Version: 1.1.2
+ * Version: 1.2.2
  * Author: Greg Bueno
  * Author URI: http://vigilantmedia.com
  * License: MIT
@@ -41,10 +41,11 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 		
 		public function init_css() {
 			wp_enqueue_style('chosen-css', plugin_dir_url(__FILE__) . 'js/chosen/chosen.min.css' );
+			wp_enqueue_style('mw-meta-css', plugin_dir_url(__FILE__) . 'css/layout.css' );
 		}
 		
 		public static function activate() {
-			
+			delete_option('aws_secret_key');
 		}
 
 		public static function deactivate() {
@@ -52,6 +53,7 @@ if (!class_exists('Musicwhore_Artist_Connector')) {
 		}
 		
 		public static function install() {
+
 		}
 	}
 
@@ -69,5 +71,5 @@ if (class_exists('Musicwhore_Artist_Connector')) {
 	// Setup template tags.
 	require_once(plugin_dir_path(__FILE__) . '/musicwhore_artist_connector_template_functions.php');
 
-	$mw_db_version = '0.01';
+	$mw_db_version = '1.1.1';
 }

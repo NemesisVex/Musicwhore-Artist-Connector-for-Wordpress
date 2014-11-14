@@ -22,6 +22,7 @@ if (!class_exists('Musicwhore_Artist_Connector_Settings')) {
 			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_host');
 			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_name');
 			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_user');
+			register_setting('musicwhore_artist_connector-group', 'musicwhore_db_password');
 			register_setting('musicwhore_artist_connector-group', 'aws_access_key');
 			register_setting('musicwhore_artist_connector-group', 'aws_affiliate_id_us');
 			register_setting('musicwhore_artist_connector-group', 'aws_affiliate_id_uk');
