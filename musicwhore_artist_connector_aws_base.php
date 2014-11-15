@@ -1,12 +1,15 @@
 <?php
 
-/**
- * Musicwhore_Artist_Connector_Aws_Base
- *
- * @author Greg Bueno
- */
-
 if (!class_exists('Musicwhore_Artist_Connector_Aws_Base')) {
+
+	/**
+	 * Musicwhore_Artist_Connector_Aws_Base
+	 *
+	 * Musicwhore_Artist_Connector_Aws_Base provides basic search and retrieval functions on the Amazon Product Marketing API.
+	 * Extend this base class to provide further functionality to the get() and search() methods.
+	 *
+	 * @author Greg Bueno
+	 */
 	class Musicwhore_Artist_Connector_Aws_Base {
 
 		protected $_access_key;
@@ -22,7 +25,16 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws_Base')) {
 			$this->_aws_path = '/onca/xml';
 			$this->_aws_url_base = $this->set_aws_url_base();
 		}
-		
+
+		/**
+		 * get
+		 *
+		 * get() retrieves product information by ASIN.
+		 *
+		 * @param $asin The ASIN on which to query
+		 * @param array $more_parameters An array of additional parameters to send to the web service.
+		 * @return array|WP_Error The results of the web service request.
+		 */
 		public function get($asin, $more_parameters = null) {
 			$parameters['ItemId'] = $asin;
 			$parameters['Operation'] = 'ItemLookup';
@@ -34,7 +46,17 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws_Base')) {
 				return $results;
 			}
 		}
-		
+
+		/**
+		 * search
+		 *
+		 * search() performs a search on the Amazon Product Marketing API.
+		 *
+		 * @param $keywords The terms by which to perform a search.
+		 * @param string $search_index
+		 * @param null $more_parameters
+		 * @return array|WP_Error
+		 */
 		public function search($keywords, $search_index = 'Music', $more_parameters = null) {
 			$parameters['SearchIndex'] = $search_index;
 			$parameters['Keywords'] = $keywords;
@@ -47,7 +69,11 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws_Base')) {
 				return $results;
 			}
 		}
-		
+
+		/**
+		 * @param $parameters
+		 * @return string
+		 */
 		public function build_request_uri( $parameters ) {
 			
 			if (empty($this->_access_key)
@@ -86,11 +112,19 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws_Base')) {
 			
 			return $request;
 		}
-		
+
+		/**
+		 * @param $url
+		 * @return array|WP_Error
+		 */
 		public function send_request($url) {
 			return wp_remote_get($url);
 		}
-		
+
+		/**
+		 * @param null $domain
+		 * @param null $path
+		 */
 		protected function set_aws_url_base($domain = null, $path = null) {
 			if (empty($domain)) {
 				$domain = $this->_aws_domain;
