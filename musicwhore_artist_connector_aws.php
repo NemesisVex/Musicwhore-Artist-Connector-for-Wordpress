@@ -56,8 +56,8 @@ if (!class_exists('Musicwhore_Artist_Connector_Aws')) {
 			} else {
 				delete_transient($cache_key);
 			}
-			
-			if (empty($results)) {
+
+			if (empty($results) || ($results['response']['code'] == 403) ) {
 				if (empty($parameters['ResponseGroup'])) {
 					$parameters['ResponseGroup'] = 'ItemAttributes';
 				}
