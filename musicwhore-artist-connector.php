@@ -9,6 +9,9 @@
  * Author URI: http://vigilantmedia.com
  * License: MIT
  */
+
+namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
+
 if (!class_exists('Musicwhore_Artist_Connector')) {
 
 	class Musicwhore_Artist_Connector {
@@ -73,3 +76,32 @@ if (class_exists('Musicwhore_Artist_Connector')) {
 
 	$mw_db_version = '1.1.1';
 }
+
+/*
+
+if (!function_exists( __NAMESPACE__ . '\\autoload' )) {
+	function autoload( $class_name )
+	{
+		$class_name = ltrim($class_name, '\\');
+		if ( strpos( $class_name, __NAMESPACE__ ) !== 0 ) {
+			return;
+		}
+
+		$class_name = str_replace( __NAMESPACE__, '', $class_name );
+
+		$path = plugin_dir_path(__FILE__) . '/lib' . str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
+
+		require_once($path);
+	}
+}
+
+spl_autoload_register(__NAMESPACE__ . '\\autoload');
+
+register_activation_hook(__FILE__, array('ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'activate'));
+register_deactivation_hook(__FILE__, array('ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'deactivate'));
+
+Setup::init();
+Settings::init();
+
+
+ */
