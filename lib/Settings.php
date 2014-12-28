@@ -63,4 +63,35 @@ class Settings {
 		wp_enqueue_style( 'chosen-css', plugin_dir_url(__FILE__) . 'js/chosen/chosen.min.css' );
 		wp_enqueue_style( 'mw-meta-css', plugin_dir_url(__FILE__) . 'css/layout.css' );
 	}
+
+	public function render_settings_db_description() {
+		echo "Connection settings for the Musicwhore.org artist database.";
+	}
+
+	public function render_settings_amazon_description() {
+		$secret_status = defined('MUSICWHORE_AWS_SECRET_KEY') === true ? 'set' : 'unset';
+		$description = 'Connection settings for Amazon ecommerce web services. The secret key is currently ' . $secret_status . '.';
+		echo $description;
+	}
+
+	public function render_settings_input_text_field($args) {
+		$field = $args['field'];
+		$value = get_option($field);
+		echo sprintf('<input type="text" name="%s" id="%s" value="%s" />', $field, $field, $value);
+	}
+
+	public function render_settings_input_password_field($args) {
+		$field = $args['field'];
+		$value = get_option($field);
+		echo sprintf('<input type="password" name="%s" id="%s" value="%s" />', $field, $field, $value);
+	}
+
+	public function render_connector_settings_page() {
+		if ( !current_user_can( 'manage_options' ) ) {
+			wp_die( 'You do not have sufficient permissions to access this page.' );
+		}
+
+		include( sprintf( "%s/Views/settings.php", plugin_dir_path( __FILE__ ) ) );
+	}
+
 }

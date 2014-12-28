@@ -1,0 +1,72 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gregbueno
+ * Date: 12/26/14
+ * Time: 11:42 AM
+ */
+
+namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
+
+
+class Artist {
+
+	public $_table = 'mw_artists';
+	public $_primary_key = 'artist_id';
+
+	public function __construct() {
+		parent::__construct();
+		$this->load_relationship( array( 'model' => 'Musicwhore_Artist_Personnel', 'alias' => 'members' ) );
+		$this->load_relationship( array( 'model' => 'Musicwhore_Artist_Meta', 'alias' => 'meta' ) );
+	}
+
+	public function get($id, $args = null) {
+		$artist = parent::get($id, $args);
+		if (!empty($artist)) {
+			$this->meta->load($id);
+
+			$artist->settings = $this->meta->get_settings();
+			$artist->artist_name = $this->format_artist_name($artist);
+			$artist->artist_members = $this->members->get_artist_members($id, array(
+				'order_by' => 'member_order',
+			));
+		}
+		return $artist;
+	}
+
+	public function get_artists($filter = null) {
+		if (!empty($filter)) {
+			$artists = $this->get_many_like('artist_last_name', $filter, 'after', array( 'order_by' => 'artist_last_name' ));
+		} else {
+			$artists = $this->get_all( array( 'order_by' => 'artist_last_name' ) );
+		}
+
+		$_this = $this;
+		array_walk($artists, function ($artist) use ($_this) {
+			$artist->artist_name = $_this->format_artist_name($artist);
+		});
+
+		return $artists;
+	}
+
+	public function get_artists_nav() {
+		$nav = $this->mw_db->get_results( 'select upper(substring(artist_last_name from 1 for 1)) as nav from mw_artists group by nav order By nav' );
+		return $nav;
+	}
+
+	public function format_artist_name($artist) {
+		$artist_display_name = null;
+		if (empty($artist->artist_first_name)) {
+			$artist_display_name = $artist->artist_last_name;
+		} else {
+			if (empty($artist->settings->is_asian_name)) {
+				$this->meta->load($artist->artist_id);
+				$artist->settings = $this->meta->get_settings();
+			}
+			$artist_display_name = ($artist->settings->is_asian_name == true) ? $artist->artist_last_name . ' '  .$artist->artist_first_name : $artist->artist_first_name . ' ' . $artist->artist_last_name;
+		}
+
+		return $artist_display_name;
+	}
+
+}
