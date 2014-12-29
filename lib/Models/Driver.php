@@ -50,6 +50,7 @@ class Driver {
 
 		// Exit if we don't have at least the artist table.
 		$mw_artist_table = $this->mw_db->get_var("show tables like 'mw_artists';");
+
 		if ($mw_artist_table != 'mw_artists') {
 			$this->mw_db = null;
 			$this->status_message = 'Musicwhore.org Artist table was not found.';

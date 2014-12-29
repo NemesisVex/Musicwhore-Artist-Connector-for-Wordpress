@@ -32,8 +32,8 @@ class Album extends Base {
 		return $album;
 	}
 
-	public function getArtistAlbums($artist_id, $args = null) {
-		$albums = $this->getManyBy('album_artist_id', $artist_id, $args);
+	public function getArtistAlbums( $artist_id, $args = null ) {
+		$albums = $this->getManyBy( 'album_artist_id', $artist_id, $args );
 		$formats = $this->format->getAll();
 		$_this = $this;
 		array_walk( $albums, function ( $album ) use ( $_this, $formats ) {

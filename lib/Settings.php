@@ -56,12 +56,12 @@ class Settings {
 	}
 
 	public static function wpEnqueueScripts() {
-		wp_enqueue_script( 'chosen-js', plugin_dir_url(__FILE__) . 'js/chosen/chosen.jquery.min.js');
+		wp_enqueue_script( 'chosen-js', plugin_dir_url( plugin_dir_path( __FILE__ ) ) . 'js/chosen/chosen.jquery.min.js', array( 'jquery' ) );
 	}
 
 	public static function wpEnqueueStyles() {
-		wp_enqueue_style( 'chosen-css', plugin_dir_url(__FILE__) . 'js/chosen/chosen.min.css' );
-		wp_enqueue_style( 'mw-meta-css', plugin_dir_url(__FILE__) . 'css/layout.css' );
+		wp_enqueue_style( 'chosen', plugin_dir_url( plugin_dir_path( __FILE__ ) ) . 'js/chosen/chosen.min.css' );
+		wp_enqueue_style( 'mw-meta', plugin_dir_url( plugin_dir_path( __FILE__ ) ) . 'css/layout.css' );
 	}
 
 	public function renderDbDescription() {

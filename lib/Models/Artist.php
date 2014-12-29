@@ -36,9 +36,9 @@ class Artist extends Base {
 
 	public function getArtists($filter = null) {
 		if ( !empty( $filter ) ) {
-			$artists = $this->get_many_like('artist_last_name', $filter, 'after', array( 'order_by' => 'artist_last_name' ));
+			$artists = $this->getManyLike('artist_last_name', $filter, 'after', array( 'order_by' => 'artist_last_name' ));
 		} else {
-			$artists = $this->get_all( array( 'order_by' => 'artist_last_name' ) );
+			$artists = $this->getAll( array( 'order_by' => 'artist_last_name' ) );
 		}
 
 		$_this = $this;
@@ -61,7 +61,7 @@ class Artist extends Base {
 		} else {
 			if ( empty( $artist->settings->is_asian_name ) ) {
 				$this->meta->load( $artist->artist_id );
-				$artist->settings = $this->meta->get_settings();
+				$artist->settings = $this->meta->getSettings();
 			}
 			$artist_display_name = ( $artist->settings->is_asian_name == true ) ? $artist->artist_last_name . ' '  .$artist->artist_first_name : $artist->artist_first_name . ' ' . $artist->artist_last_name;
 		}

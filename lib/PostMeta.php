@@ -9,8 +9,10 @@
 namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
 
 
+use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Album;
 use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Artist;
 use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Driver;
+use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Release;
 
 class PostMeta {
 
@@ -25,8 +27,8 @@ class PostMeta {
 	public static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'addMetaBoxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'savePostMeta' ) );
-		add_action( 'wp_ajax_get_artist_albums', array( __CLASS__, 'get_artist_albums' ) );
-		add_action( 'wp_ajax_get_album_releases', array( __CLASS__, 'get_album_releases' ) );
+		add_action( 'wp_ajax_getArtistAlbums', array( __CLASS__, 'getArtistAlbums' ) );
+		add_action( 'wp_ajax_getAlbumReleases', array( __CLASS__, 'getAlbumReleases' ) );
 	}
 
 	public static function addMetaBoxes() {
@@ -47,40 +49,38 @@ class PostMeta {
 			$artists = $artist_model->getArtists();
 		}
 
-		return;
-
-		if (!empty($mw_artist_id)) {
-			$album_model = new Musicwhore_Album();
-			if ( $album_model->get_driver_status() === true ) {
-				$albums = $album_model->get_artist_albums($mw_artist_id);
-				usort($albums, function ($a, $b) {
-					return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
+		if ( !empty( $mw_artist_id ) ) {
+			$album_model = new Album();
+			if ( $album_model->getDriverStatus() === true ) {
+				$albums = $album_model->getArtistAlbums( $mw_artist_id );
+				usort($albums, function ( $a, $b ) {
+					return ( $a->album_title == $b->album_title ) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
 				});
 			}
 		}
 
-		if (!empty($mw_album_id)) {
-			$release_model = new Musicwhore_Release();
-			if ( $release_model->get_driver_status() === true ) {
-				$releases = $release_model->get_album_releases($mw_album_id);
-				usort($releases, function ($a, $b) {
-					return ($a->release_catatalog_num == $b->release_catatalog_num) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
+		if ( !empty( $mw_album_id ) ) {
+			$release_model = new Release();
+			if ( $release_model->getDriverStatus() === true ) {
+				$releases = $release_model->getAlbumReleases( $mw_album_id );
+				usort( $releases, function ( $a, $b ) {
+					return ( $a->release_catatalog_num == $b->release_catatalog_num ) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
 				});
 			}
 		}
 
-		include(sprintf("%s/templates/mw_meta_box.php", dirname(__FILE__)));
+		include( sprintf( "%s/Views/mw_meta_box.php", plugin_dir_path( __FILE__ ) ) );
 	}
 
-	public static function get_artist_albums() {
+	public static function getArtistAlbums() {
 		$mw_artist_id = $_POST['mw_artist_id'];
 
 		if (!empty( $mw_artist_id )) {
-			$album_model = new Musicwhore_Album();
-			if ( $album_model->get_driver_status() === true ) {
-				$albums = $album_model->get_artist_albums($mw_artist_id);
-				usort($albums, function ($a, $b) {
-					return ($a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
+			$album_model = new Album();
+			if ( $album_model->getDriverStatus() === true ) {
+				$albums = $album_model->getArtistAlbums( $mw_artist_id );
+				usort( $albums, function ( $a, $b ) {
+					return ( $a->album_title == $b->album_title) ? 0 : ( $a->album_title < $b->album_title ? -1 : 1 );
 				});
 			}
 			$albums_json = json_encode( $albums );
@@ -90,15 +90,15 @@ class PostMeta {
 	}
 
 
-	public static function get_album_releases() {
+	public static function getAlbumReleases() {
 		$mw_album_id = $_POST['mw_album_id'];
 
 		if (!empty( $mw_album_id )) {
-			$release_model = new Musicwhore_Release();
-			if ( $release_model->get_driver_status() === true ) {
-				$releases = $release_model->get_album_releases($mw_album_id);
-				usort($releases, function ($a, $b) {
-					return ($a->release_catatalog_num == $b->release_catatalog_num) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
+			$release_model = new Release();
+			if ( $release_model->getDriverStatus() === true ) {
+				$releases = $release_model->getAlbumReleases( $mw_album_id );
+				usort( $releases, function ( $a, $b ) {
+					return ( $a->release_catatalog_num == $b->release_catatalog_num ) ? 0 : ( $a->release_catatalog_num < $b->release_catatalog_num ? -1 : 1 );
 				});
 			}
 			$releases_json = json_encode( $releases );
@@ -113,9 +113,9 @@ class PostMeta {
 		$mw_album_id = $_POST['mw_album_id'];
 		$mw_release_id = $_POST['mw_release_id'];
 
-		(empty($mw_artist_id)) ? delete_post_meta($post_id, '_mw_artist_id') : update_post_meta($post_id, '_mw_artist_id', $mw_artist_id);
-		(empty($mw_album_id)) ? delete_post_meta($post_id, '_mw_album_id') : update_post_meta($post_id, '_mw_album_id', $mw_album_id);
-		(empty($mw_release_id)) ? delete_post_meta($post_id, '_mw_release_id') : update_post_meta($post_id, '_mw_release_id', $mw_release_id);
+		( empty( $mw_artist_id ) ) ? delete_post_meta( $post_id, '_mw_artist_id' ) : update_post_meta( $post_id, '_mw_artist_id', $mw_artist_id );
+		( empty( $mw_album_id ) ) ? delete_post_meta( $post_id, '_mw_album_id' ) : update_post_meta( $post_id, '_mw_album_id', $mw_album_id );
+		( empty( $mw_release_id ) ) ? delete_post_meta( $post_id, '_mw_release_id' ) : update_post_meta( $post_id, '_mw_release_id', $mw_release_id );
 	}
 
 }

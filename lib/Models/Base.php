@@ -10,7 +10,7 @@ namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models;
 
 
 class Base {
-	private $driver_is_ready;
+	private $is_driver_ready;
 
 	protected $mw_db;
 
@@ -20,7 +20,7 @@ class Base {
 	public function __construct() {
 		$driver = new Driver();
 		$this->mw_db = $driver->getDriver();
-		$this->is_driver_ready = $driver->getStatus();
+		$this->is_driver_ready = $driver->isReady();
 	}
 
 	public function get($id, $args = null) {
@@ -120,7 +120,7 @@ class Base {
 	}
 
 	public function getDriverStatus() {
-		return $this->driver_is_ready;
+		return $this->is_driver_ready;
 	}
 
 }

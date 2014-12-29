@@ -20,7 +20,7 @@ class Meta extends Base {
 	}
 
 	public function load( $key, $id ) {
-		$this->items = $this->get_many_by( $key, $id );
+		$this->items = $this->getManyBy( $key, $id );
 
 		$settings = array();
 		foreach ( $this->items as $item ) {
@@ -38,7 +38,7 @@ class Meta extends Base {
 	}
 
 	public function getMeta( $name ) {
-		return $this->get_by( 'meta_field_name', $name );
+		return $this->getBy( 'meta_field_name', $name );
 	}
 
 }
