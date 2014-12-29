@@ -104,3 +104,4 @@ register_deactivation_hook(__FILE__, array('ObservantRecords\WordPress\Plugins\M
 Setup::init();
 Settings::init();
 PostMeta::init();
+Rewrite::init();

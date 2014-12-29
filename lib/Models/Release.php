@@ -9,6 +9,8 @@
 namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models;
 
 
+use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Amazon\WebService;
+
 class Release extends Base {
 
 	public $_table = 'mw_albums_releases';
@@ -56,12 +58,12 @@ class Release extends Base {
 
 	public function getReleaseFromAmazon( $asin, $country_name = 'United States' ) {
 
-		$locale = array_search( $country_name, Musicwhore_Artist_Connector_Aws::$_locale_labels );
+		$locale = array_search( $country_name, WebService::$_locale_labels );
 		if (empty($locale)) {
 			$locale = 'us';
 		}
 
-		$aws = new Musicwhore_Artist_Connector_Aws( array( 'locale' => $locale ) );
+		$aws = new WebService( array( 'locale' => $locale ) );
 
 		$parameters['ResponseGroup'] = 'Large';
 		$wp_results = $aws->get( $asin, $parameters );
