@@ -6,22 +6,21 @@
  * Time: 11:40 AM
  */
 
-namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
+namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models;
 
 
 class Base {
-
 	private $driver_is_ready;
+
 	protected $mw_db;
 
 	public $_table;
 	public $_primary_key;
 
 	public function __construct() {
-		require_once(plugin_dir_path(__FILE__) . '../musicwhore_artist_connector_db_driver.php');
-		$driver = new Musicwhore_Artist_Connector_Db_Driver();
-		$this->mw_db = $driver->get_driver();
-		$this->driver_is_ready = $driver->is_ready();
+		$driver = new Driver();
+		$this->mw_db = $driver->getDriver();
+		$this->is_driver_ready = $driver->getStatus();
 	}
 
 	public function get($id, $args = null) {
@@ -34,7 +33,7 @@ class Base {
 		return $result;
 	}
 
-	public function get_all($args = null) {
+	public function getAll($args = null) {
 		$fields = !empty($args['fields']) ? implode(", ", $args['fields']) : '*';
 
 		$order_by = $args['order_by'];
@@ -51,7 +50,7 @@ class Base {
 		return $result;
 	}
 
-	public function get_by($field, $value, $args = null) {
+	public function getBy($field, $value, $args = null) {
 		$fields = !empty($args['fields']) ? implode(", ", $args['fields']) : '*';
 
 		$prepared_query = $this->mw_db->prepare( "select $fields from $this->_table where $field = %s", $value);
@@ -61,7 +60,7 @@ class Base {
 		return $result;
 	}
 
-	public function get_many_by($field, $value, $args = null) {
+	public function getManyBy($field, $value, $args = null) {
 		$fields = !empty($args['fields']) ? implode(", ", $args['fields']) : '*';
 
 		$order_by = $args['order_by'];
@@ -78,7 +77,7 @@ class Base {
 		return $result;
 	}
 
-	public function get_many_like($field, $value, $pos = 'all', $args = null) {
+	public function getManyLike($field, $value, $pos = 'all', $args = null) {
 		$fields = !empty($args['fields']) ? implode(", ", $args['fields']) : '*';
 
 		$order_by = $args['order_by'];
@@ -107,7 +106,7 @@ class Base {
 		return $result;
 	}
 
-	public function load_relationship($args) {
+	public function loadRelationship($args) {
 
 		$model = null;
 		if (is_array($args)) {
@@ -120,7 +119,7 @@ class Base {
 		$this->{$alias} = new $model();
 	}
 
-	public function get_driver_status() {
+	public function getDriverStatus() {
 		return $this->driver_is_ready;
 	}
 

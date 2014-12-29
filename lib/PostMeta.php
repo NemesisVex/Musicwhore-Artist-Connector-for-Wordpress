@@ -9,44 +9,45 @@
 namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
 
 
+use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Artist;
+use VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models\Driver;
+
 class PostMeta {
 
 	private $mw_db;
 
 	public function __construct() {
 		// Connect to artist database.
-		require_once(plugin_dir_path(__FILE__) . '/musicwhore_artist_connector_db_driver.php');
-		$db_driver = new Musicwhore_Artist_Connector_Db_Driver();
-		$this->mw_db = $db_driver->get_driver();
-
-		// Setup post meta
-		add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
-		add_action('save_post', array(&$this, 'save_post_meta'));
-		add_action('wp_ajax_get_artist_albums', array(__CLASS__, 'get_artist_albums'));
-		add_action('wp_ajax_get_album_releases', array(__CLASS__, 'get_album_releases'));
+		$driver = new Driver();
+		$this->mw_db = $driver->getDriver();
 	}
 
 	public static function init() {
-
+		add_action( 'add_meta_boxes', array( __CLASS__, 'addMetaBoxes' ) );
+		add_action( 'save_post', array( __CLASS__, 'savePostMeta' ) );
+		add_action( 'wp_ajax_get_artist_albums', array( __CLASS__, 'get_artist_albums' ) );
+		add_action( 'wp_ajax_get_album_releases', array( __CLASS__, 'get_album_releases' ) );
 	}
 
-	public function add_meta_boxes() {
-		add_meta_box('meta_mw_artist_id', 'Musicwhore Metadata', array(&$this, 'render_mw_meta_box'), 'post', 'normal', 'high');
+	public static function addMetaBoxes() {
+		add_meta_box( 'meta_mw_artist_id', 'Musicwhore Metadata', array( __CLASS__, 'renderMetaBox' ), 'post', 'normal', 'high' );
 	}
 
-	public function render_mw_meta_box ( $post ) {
+	public function renderMetaBox ( $post ) {
 		if (!current_user_can('edit_posts')) {
 			wp_die('You do not have sufficient permissions to access this page.');
 		}
 
-		$mw_artist_id = get_post_meta($post->ID, '_mw_artist_id', true);
-		$mw_album_id = get_post_meta($post->ID, '_mw_album_id', true);
-		$mw_release_id = get_post_meta($post->ID, '_mw_release_id', true);
+		$mw_artist_id = get_post_meta( $post->ID, '_mw_artist_id', true );
+		$mw_album_id = get_post_meta( $post->ID, '_mw_album_id', true );
+		$mw_release_id = get_post_meta( $post->ID, '_mw_release_id', true );
 
-		$artist_model = new Musicwhore_Artist();
-		if ( $artist_model->get_driver_status() === true ) {
-			$artists = $artist_model->get_artists();
+		$artist_model = new Artist();
+		if ( $artist_model->getDriverStatus() === true ) {
+			$artists = $artist_model->getArtists();
 		}
+
+		return;
 
 		if (!empty($mw_artist_id)) {
 			$album_model = new Musicwhore_Album();
@@ -107,7 +108,7 @@ class PostMeta {
 	}
 
 
-	public function save_post_meta( $post_id ) {
+	public function savePostMeta( $post_id ) {
 		$mw_artist_id = $_POST['mw_artist_id'];
 		$mw_album_id = $_POST['mw_album_id'];
 		$mw_release_id = $_POST['mw_release_id'];

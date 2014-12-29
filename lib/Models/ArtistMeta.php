@@ -6,7 +6,7 @@
  * Time: 11:45 AM
  */
 
-namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
+namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models;
 
 
 class ArtistMeta extends Meta {
@@ -18,7 +18,7 @@ class ArtistMeta extends Meta {
 	}
 
 	public function load($id) {
-		parent::load('meta_artist_id', $id);
+		parent::load( 'meta_artist_id', $id );
 	}
 
 }

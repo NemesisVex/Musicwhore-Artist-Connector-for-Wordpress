@@ -6,7 +6,7 @@
  * Time: 11:43 AM
  */
 
-namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
+namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Models;
 
 
 class Meta extends Base {
@@ -29,15 +29,15 @@ class Meta extends Base {
 		$this->settings = (object) $settings;
 	}
 
-	public function get_settings() {
+	public function getSettings() {
 		return $this->settings;
 	}
 
-	public function get_setting( $name ) {
+	public function getSetting( $name ) {
 		return $this->settings[$name];
 	}
 
-	public function get_meta( $name ) {
+	public function getMeta( $name ) {
 		return $this->get_by( 'meta_field_name', $name );
 	}
 
