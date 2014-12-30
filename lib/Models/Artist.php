@@ -25,9 +25,9 @@ class Artist extends Base {
 		if ( !empty( $artist ) ) {
 			$this->meta->load( $id );
 
-			$artist->settings = $this->meta->get_settings();
-			$artist->artist_name = $this->format_artist_name($artist);
-			$artist->artist_members = $this->members->get_artist_members( $id, array(
+			$artist->settings = $this->meta->getSettings();
+			$artist->artist_name = $this->formatArtistName($artist);
+			$artist->artist_members = $this->members->getArtistMembers( $id, array(
 				'order_by' => 'member_order',
 			) );
 		}

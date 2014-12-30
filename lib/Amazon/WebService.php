@@ -47,7 +47,7 @@ class WebService extends WebServiceBase {
 		$this->_enable_transient = isset( $options['enable_transient'] ) ? $options['enable_transient'] : true;
 	}
 
-	public function get($asin, $parameters = null) {
+	public function get( $asin, $parameters = null ) {
 		$cache_key = md5( $asin . MUSICWHORE_AWS_SECRET_KEY );
 		$results = null;
 
@@ -88,7 +88,7 @@ class WebService extends WebServiceBase {
 			$results = parent::search( $keywords, $index, $parameters );
 
 			if ( $this->_enable_transient === true ) {
-				set_transient( $cache_key, serialize($results), 2 * WEEK_IN_SECONDS );
+				set_transient( $cache_key, serialize( $results ), 2 * WEEK_IN_SECONDS );
 			}
 		}
 
@@ -96,16 +96,16 @@ class WebService extends WebServiceBase {
 	}
 
 
-	public function setAffiliateIdByLocale($locale = 'us') {
+	public function setAffiliateIdByLocale( $locale = 'us' ) {
 		$option_name = 'aws_affiliate_id_' . $locale;
-		$this->_affiliate_id = get_option($option_name);
+		$this->_affiliate_id = get_option( $option_name );
 	}
 
-	public function setAwsDomainByLocale($locale = 'us') {
+	public function setAwsDomainByLocale( $locale = 'us' ) {
 		$this->_aws_domain = WebService::$_locale_urls[$locale];
 	}
 
-	public function enableTransient($flag = true) {
+	public function enableTransient( $flag = true ) {
 		$this->_enable_transient = $flag;
 	}
 

@@ -86,7 +86,7 @@ class WebServiceBase {
 			return false;
 		}
 
-		$base_parameters['Timestamp'] = gmdate("Y-m-d\TH:i:s\Z");
+		$base_parameters['Timestamp'] = gmdate( "Y-m-d\TH:i:s\Z" );
 		$base_parameters['Version'] = '2009-03-01';
 		$base_parameters['AWSAccessKeyId'] = $this->_access_key;
 		$base_parameters['Service'] = 'AWSECommerceService';
