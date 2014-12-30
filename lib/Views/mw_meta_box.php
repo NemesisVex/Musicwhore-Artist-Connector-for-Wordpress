@@ -1,5 +1,5 @@
 <div class="wrap mw-meta">
-	<?php if ( $artist_model->get_driver_status() === false ): ?>
+	<?php if ( $artist_model->getDriverStatus() === false ): ?>
 	<p>
 		The database driver may not be configured correctly. Check the <a href="<?php echo admin_url( 'options-general.php?page=musicwhore_artist_connector'); ?>">Musicwhore Artist Connector settings</a>.
 	</p>
@@ -86,7 +86,7 @@
 		MetaBoxHandler.empty_releases();
 
 		var data = {
-			action: 'get_artist_albums',
+			action: 'getArtistAlbums',
 			mw_artist_id: this.value
 		}
 
@@ -110,7 +110,7 @@
 		MetaBoxHandler.empty_releases();
 
 		var data = {
-			action: 'get_album_releases',
+			action: 'getAlbumReleases',
 			mw_album_id: this.value
 		}
 
