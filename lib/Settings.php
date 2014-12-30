@@ -52,7 +52,7 @@ class Settings {
 	}
 
 	public static function adminMenu() {
-		add_options_page('Musicwhore Artist Connector Settings', 'Musicwhore Artist Connector', 'manage_options', WP_PLUGIN_DOMAIN, array( __CLASS__, 'renderConnectorSettingsPage'));
+		add_options_page( 'Musicwhore Artist Connector Settings', 'Musicwhore Artist Connector', 'manage_options', WP_PLUGIN_DOMAIN, array( __CLASS__, 'renderConnectorSettingsPage' ) );
 	}
 
 	public static function wpEnqueueScripts() {
@@ -69,21 +69,21 @@ class Settings {
 	}
 
 	public function renderAmazonDescription() {
-		$secret_status = defined('MUSICWHORE_AWS_SECRET_KEY') === true ? 'set' : 'unset';
+		$secret_status = defined( 'MUSICWHORE_AWS_SECRET_KEY' ) === true ? 'set' : 'unset';
 		$description = 'Connection settings for Amazon ecommerce web services. The secret key is currently ' . $secret_status . '.';
 		echo $description;
 	}
 
-	public function renderInputTextField($args) {
+	public function renderInputTextField( $args ) {
 		$field = $args['field'];
-		$value = get_option($field);
-		echo sprintf('<input type="text" name="%s" id="%s" value="%s" />', $field, $field, $value);
+		$value = get_option( $field );
+		echo sprintf( '<input type="text" name="%s" id="%s" value="%s" />', $field, $field, $value );
 	}
 
-	public function renderInputPasswordField($args) {
+	public function renderInputPasswordField( $args ) {
 		$field = $args['field'];
-		$value = get_option($field);
-		echo sprintf('<input type="password" name="%s" id="%s" value="%s" />', $field, $field, $value);
+		$value = get_option( $field );
+		echo sprintf( '<input type="password" name="%s" id="%s" value="%s" />', $field, $field, $value );
 	}
 
 	public function renderConnectorSettingsPage() {

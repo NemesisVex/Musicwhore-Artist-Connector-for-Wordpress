@@ -22,7 +22,7 @@ class Rewrite {
 
 	public function initRewriteRules() {
 
-		do_action('musicwhore_artist_connector_register_rewrite_rule');
+		do_action( 'musicwhore_artist_connector_register_rewrite_rule' );
 
 		add_rewrite_rule( 'artist/browse/([^/]*)', 'index.php?pagename=artist&module=artist&browse=$matches[1]', 'top' );
 		add_rewrite_rule( 'artist/browse', 'index.php?pagename=artist&module=artist&browse=all', 'top' );

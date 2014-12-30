@@ -3,6 +3,8 @@
 /**
  * Musicwhore_Artist_Connector_Template_Functions
  *
+ * These globally-scoped functions are available for use in themes.
+ *
  * @author Greg Bueno
  */
 

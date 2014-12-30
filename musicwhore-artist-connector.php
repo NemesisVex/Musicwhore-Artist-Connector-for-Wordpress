@@ -12,6 +12,7 @@
 
 namespace VigilantMedia\WordPress\Plugins\MusicwhoreOrg\ArtistConnector;
 
+// Create an autoloader for classes.
 if (!function_exists( __NAMESPACE__ . '\\autoload' )) {
 	function autoload( $class_name )
 	{
@@ -30,12 +31,20 @@ if (!function_exists( __NAMESPACE__ . '\\autoload' )) {
 
 spl_autoload_register (__NAMESPACE__ . '\\autoload' );
 
-register_activation_hook( __FILE__, array('ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'activate' ) );
-register_deactivation_hook( __FILE__, array('ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'deactivate' ) );
+// Run any activation hooks.
+register_activation_hook( __FILE__, array( 'ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'ObservantRecords\WordPress\Plugins\MusicwhoreOrg\ArtistConnector\Setup', 'deactivate' ) );
 
+// Run any setup needed for the plugin.
 Setup::init();
+
+// Creating the settings page for the plugin.
 Settings::init();
+
+// Add meta data fields in posts.
 PostMeta::init();
+
+// Create additional rewrite rules.
 Rewrite::init();
 
 // Setup template tags.
